@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t TestImage -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true TestImage npm run test -- --coverage
+
+after_success:
+  - docker build -t ckilcioglu/multi-client ./client
+  - docker build -t ckilcioglu/multi-nginx ./nginx
+  - docker build -t ckilcioglu/multi-server ./server
+  - docker build -t ckilcioglu/multi-worker ./worker
+  # login to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to docker hub
+  - docker push ckilcioglu/multi-client
+  - docker push ckilcioglu/multi-nginx
+  - docker push ckilcioglu/multi-server
+  - docker push ckilcioglu/multi-worker
