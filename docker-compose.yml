@@ -23,11 +23,11 @@ services:
       - PGPASSWORD=$PGPASSWORD
       - PGPORT=$PGPORT
   client:
-    mage: "ckilcioglu/multi-client"
+    image: "ckilcioglu/multi-client"
     mem_limit: 128m
     hostname: client
   worker:
-    mage: "ckilcioglu/multi-worker"
+    image: "ckilcioglu/multi-worker"
     mem_limit: 128m
     hostname: worker
     environment:
